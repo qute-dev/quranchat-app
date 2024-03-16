@@ -7,6 +7,8 @@
   <menu-drawer v-model="showMenu" />
 
   <q-page class="q-mx-md q-mt-md">
+    <!-- CHAT LIST -->
+    <!-- MESSAGE BOX -->
   </q-page>
 </template>
 
