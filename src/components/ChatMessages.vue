@@ -12,9 +12,12 @@
     </q-scroll-area>
 
     <!-- INPUT -->
-    <q-input outlined rounded autofocus v-model="msgText" dense @keydown.enter="sendMessage" class="q-my-sm">
+    <q-input ref="msgInput" outlined rounded autofocus dense v-model="msgText"
+      :placeholder="chatStore.method === 'llm' ? 'Coming Soon...' : 'Masukkan keyword/perintah'"
+      @keydown.enter="sendMessage" class="q-my-sm">
       <template v-slot:append>
-        <q-btn dense flat :icon="ionPaperPlaneOutline" @click="sendMessage" class="q-ml-xs" />
+        <q-btn dense flat round color="primary" :disable="chatStore.method === 'llm'" :icon="ionPaperPlaneOutline"
+          @click="sendMessage" class="q-ml-xs" />
       </template>
     </q-input>
   </div>
@@ -23,7 +26,7 @@
 
 <script setup lang="ts">
 import { onMounted, ref, watch } from 'vue';
-import { QScrollArea, copyToClipboard, useQuasar } from 'quasar';
+import { QInput, QScrollArea, copyToClipboard, useQuasar } from 'quasar';
 
 import { ionPaperPlaneOutline } from '@quasar/extras/ionicons-v7';
 
@@ -34,11 +37,15 @@ const chatStore = useChatStore();
 const $q = useQuasar();
 
 const msgScroll = ref<QScrollArea>();
+const msgInput = ref<QInput>();
 const msgText = ref('');
 
 watch(
   () => chatStore.method,
-  () => scrollToBottom(),
+  async () => {
+    msgInput.value?.focus();
+    await scrollToBottom();
+  },
   { immediate: true }
 )
 
@@ -48,6 +55,8 @@ async function scrollToBottom() {
 }
 
 async function sendMessage() {
+  if (!msgText.value || chatStore.method === 'llm') return;
+
   await chatStore.sendMessage(msgText.value);
   msgText.value = '';
   await scrollToBottom();

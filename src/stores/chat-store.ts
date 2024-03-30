@@ -40,7 +40,11 @@ function chatStore() {
     }
   }
 
-  return { method, messages, filteredMsgs, init, sendMessage };
+  function clear() {
+    messages.value = [];
+  }
+
+  return { method, messages, filteredMsgs, init, sendMessage, clear };
 }
 
 export const useChatStore = defineStore('chat', chatStore, {
