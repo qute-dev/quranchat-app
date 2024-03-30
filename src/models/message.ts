@@ -1,6 +1,7 @@
 export interface Message {
   id: string;
-  date: string;
+  time: string;
   text: string;
-  from: 'user' | 'bot';
+  name: string;
+  from: 'me' | 'bot';
 }
