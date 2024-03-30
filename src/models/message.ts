@@ -4,4 +4,5 @@ export interface Message {
   text: string;
   name: string;
   from: 'me' | 'bot';
+  method: 'nlp' | 'llm';
 }

@@ -1,15 +1,15 @@
 <template>
   <!-- TOP HEADER  -->
-  <page-header title="QuranChat.me" subtitle="Menjadi lebih dekat setiap hari 💖" :icon="ionMenuOutline"
+  <page-header title="QuranChat.me" subtitle="Jadi lebih dekat setiap hari 💖" :icon="ionMenuOutline"
     @icon-click="showMenu = !showMenu" />
 
   <!-- MENU DRAWER -->
   <menu-drawer v-model="showMenu" />
 
-  <q-page class="q-mx-md q-mt-md">
-    <!-- CHAT LIST -->
-    <!-- MESSAGE BOX -->
-  </q-page>
+  <div class="q-mx-md q-pt-md">
+    <mode-tabs />
+    <chat-messages />
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -21,6 +21,8 @@ import {
 
 import PageHeader from 'src/components/PageHeader.vue';
 import MenuDrawer from 'src/components/MenuDrawer.vue';
+import ChatMessages from 'src/components/ChatMessages.vue';
+import ModeTabs from 'src/components/ModeTabs.vue';
 
 const showMenu = ref(false);
 
