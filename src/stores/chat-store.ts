@@ -1,43 +1,43 @@
 import { computed, ref } from 'vue';
 import { defineStore } from 'pinia';
+import { v4 as uuid } from 'uuid';
 
 import { Message } from 'src/models';
+import { getReply } from 'src/services/nlp';
 
 function chatStore() {
   const method = ref<'nlp' | 'llm'>('nlp');
 
+  const user = ref('');
   const messages = ref([] as Message[]);
 
   const filteredMsgs = computed(() =>
-    messages.value.filter((msg) => msg.method === method.value)
+    messages.value
+      .filter((msg) => msg.method === method.value)
+      .sort((a, b) => (a.time || 0) - (b.time || 0))
   );
 
-  function sendMessage(text: string) {
+  async function sendMessage(text: string) {
     const msg: Message = {
       id: `${messages.value.length}`,
-      time: new Date().toISOString(),
+      time: Date.now(),
       text,
-      name: 'Me',
       from: 'me',
       method: method.value,
     };
 
     messages.value.push(msg);
+
+    const answer = await getReply(text, user.value);
+
+    answer.method = msg.method;
+    answer.from = 'bot';
+
+    messages.value.push(answer);
   }
 
   function init() {
-    if (messages.value?.length) return;
-
-    for (let i = 0; i < 15; i++) {
-      messages.value?.push({
-        id: `${i}`,
-        time: new Date(2022, 1, i + 1, 12, 30, 0).toISOString(),
-        text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-        name: `Username ${i}`,
-        method: 'nlp',
-        from: i % 2 === 0 ? 'me' : 'bot',
-      });
-    }
+    if (!user.value) user.value = uuid();
   }
 
   function clear() {

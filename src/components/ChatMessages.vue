@@ -1,12 +1,25 @@
 <template>
   <div class="bg-grey-2 q-mt-sm" style="border-radius: 16px">
     <!-- MESSAGES  -->
-    <q-scroll-area ref="msgScroll" style="height: 70vh;">
+    <q-scroll-area ref="msgScroll" style="height: 73vh;">
       <q-list class="q-px-md">
-        <template v-for="(msg, index) in chatStore.filteredMsgs" :key="index">
-          <q-chat-message :name="msg.name" :text="[msg.text]" :sent="msg.from === 'me'"
-            :bg-color="msg.from === 'me' ? 'teal-2' : 'grey-1'" :text-color="msg.from === 'me' ? 'black' : 'black'"
-            class="cursor-pointer" @click="msg.from === 'bot' && copyText(msg.text)" />
+        <div v-if="!chatStore.filteredMsgs.length" class="text-center">
+          <div v-if="chatStore.method === 'nlp'" class="column items-center full-width">
+            <q-badge>Cepat & tepat dg kata kunci/perintah.</q-badge>
+            <div class="row items-center q-gutter-x-xs q-pt-sm">
+              <q-btn v-for="text in samples" :key="text" rounded outline dense size="sm" color="primary" :label="text"
+                @click="sendText(text)" class="q-px-sm q-my-xs" />
+            </div>
+          </div>
+          <q-badge v-else-if="chatStore.method === 'llm'">Lebih interaktif dg generatif AI (segera hadir).</q-badge>
+        </div>
+        <template v-for="(msg) in chatStore.filteredMsgs" :key="msg.id">
+          <q-chat-message :text="generateTexts(msg)" :text-html="msg.from === 'bot'" :sent="msg.from === 'me'"
+            :bg-color="msg.from === 'me' ? 'teal-2' : 'grey-3'" :text-color="msg.from === 'me' ? 'black' : 'black'"
+            class="cursor-pointer" @click="msg.from === 'bot'" />
+          <div v-if="msg.from === 'bot' && msg.data?.next" class="full-width text-center">
+            <q-btn dense rounded outline color="primary" label="Lanjut" class="q-px-sm" @click="sendText('lanjut')" />
+          </div>
         </template>
       </q-list>
     </q-scroll-area>
@@ -32,6 +45,7 @@ import { ionPaperPlaneOutline } from '@quasar/extras/ionicons-v7';
 
 import { useChatStore } from 'src/stores/chat-store';
 import { sleep } from 'src/utils';
+import { Message } from 'src/models';
 
 const chatStore = useChatStore();
 const $q = useQuasar();
@@ -49,19 +63,67 @@ watch(
   { immediate: true }
 )
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const samples = ref(['al ikhlas', 'an nahl 3-10', 'malaikat', '2 185', 'surat 114', 'ar rahman', 'nikah', 'rezeki']);
+
 async function scrollToBottom() {
   await sleep(100);
   msgScroll?.value?.setScrollPercentage('vertical', 1);
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function generateTexts(msg: Message) {
+  const texts = [msg.text || ''];
+
+  const chapter = msg.data?.chapter;
+
+  if (chapter) {
+    let title = `QS ${chapter.name}`;
+
+    if (msg.data?.verses?.length === 1) title += `:${msg.data?.verses[0].verse}`
+
+    texts.push(title);
+  }
+
+  if (msg.data?.verses && msg.data?.translations) {
+    for (let i = 0; i < msg.data.verses.length; i++) {
+      const verse = msg.data.verses[i];
+      const trans = msg.data.translations[i];
+
+      if (!chapter) {
+        texts.push(`QS ${verse.chapter}:${verse.verse}`);
+      }
+
+      texts.push(`<div class="text-right text-h5">${verse.text}<span class="text-caption"> (${verse.verse})</span></div>`);
+      texts.push(`<div class="text-italic"">${trans.text}</div>`);
+    }
+  }
+
+  return texts;
+}
+
 async function sendMessage() {
   if (!msgText.value || chatStore.method === 'llm') return;
 
+  // msgScroll?.value?.setScrollPercentage('vertical', 1);
+  await scrollToBottom();
+  await sleep(100);
+
+  const offset = msgScroll?.value?.getScrollPosition();
+
   await chatStore.sendMessage(msgText.value);
   msgText.value = '';
-  await scrollToBottom();
+
+  msgScroll?.value?.setScrollPosition('vertical', (offset?.top || 0) + 400, 250);
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+async function sendText(text: string) {
+  msgText.value = text;
+  await sendMessage();
+}
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 async function copyText(text: string) {
   await copyToClipboard(text);
   $q.notify({ message: 'Text copied to clipboard', timeout: 500, color: 'info' });
