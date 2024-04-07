@@ -1,14 +1,24 @@
 <template>
   <div class="bg-grey-2 q-mt-sm" style="border-radius: 16px">
     <!-- MESSAGES  -->
-    <q-scroll-area ref="msgScroll" style="height: 70vh;">
+    <q-scroll-area ref="msgScroll" style="height: 73vh;">
       <q-list class="q-px-md">
+        <div v-if="!chatStore.filteredMsgs.length" class="text-center">
+          <div v-if="chatStore.method === 'nlp'" class="column items-center full-width">
+            <q-badge>Cepat & tepat dg kata kunci/perintah.</q-badge>
+            <div class="row items-center q-gutter-x-xs q-pt-sm">
+              <q-btn v-for="text in samples" :key="text" rounded outline dense size="sm" color="primary" :label="text"
+                @click="sendText(text)" class="q-px-sm q-my-xs" />
+            </div>
+          </div>
+          <q-badge v-else-if="chatStore.method === 'llm'">Lebih interaktif dg generatif AI (segera hadir).</q-badge>
+        </div>
         <template v-for="(msg) in chatStore.filteredMsgs" :key="msg.id">
           <q-chat-message :text="generateTexts(msg)" :text-html="msg.from === 'bot'" :sent="msg.from === 'me'"
             :bg-color="msg.from === 'me' ? 'teal-2' : 'grey-3'" :text-color="msg.from === 'me' ? 'black' : 'black'"
             class="cursor-pointer" @click="msg.from === 'bot'" />
           <div v-if="msg.from === 'bot' && msg.data?.next" class="full-width text-center">
-            <q-btn dense rounded outline color="primary" label="Lanjut" class="q-px-sm" @click="nextResult" />
+            <q-btn dense rounded outline color="primary" label="Lanjut" class="q-px-sm" @click="sendText('lanjut')" />
           </div>
         </template>
       </q-list>
@@ -53,11 +63,15 @@ watch(
   { immediate: true }
 )
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const samples = ref(['al ikhlas', 'an nahl 3-10', 'malaikat', '2 185', 'surat 114', 'ar rahman', 'nikah', 'rezeki']);
+
 async function scrollToBottom() {
   await sleep(100);
   msgScroll?.value?.setScrollPercentage('vertical', 1);
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function generateTexts(msg: Message) {
   const texts = [msg.text || ''];
 
@@ -91,6 +105,10 @@ function generateTexts(msg: Message) {
 async function sendMessage() {
   if (!msgText.value || chatStore.method === 'llm') return;
 
+  // msgScroll?.value?.setScrollPercentage('vertical', 1);
+  await scrollToBottom();
+  await sleep(100);
+
   const offset = msgScroll?.value?.getScrollPosition();
 
   await chatStore.sendMessage(msgText.value);
@@ -99,9 +117,9 @@ async function sendMessage() {
   msgScroll?.value?.setScrollPosition('vertical', (offset?.top || 0) + 400, 250);
 };
 
-async function nextResult() {
-  msgText.value = 'lanjut';
-
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+async function sendText(text: string) {
+  msgText.value = text;
   await sendMessage();
 }
 

@@ -7,7 +7,9 @@
       <q-img v-else src="~/assets/quranchat-logo.png" style="width:32px" to="/" class="cursor-pointer" />
 
       <q-toolbar-title>
-        <div class="text-primary text-subtitle1 text-bold" style="line-height: normal;">{{ title }}</div>
+        <div class="text-primary text-subtitle1 text-bold" style="line-height: normal;">{{ title }}
+          <q-badge color="orange" text-color="white" label="beta" />
+        </div>
         <div class="text-caption text-primary">{{ subtitle }}</div>
       </q-toolbar-title>
 
