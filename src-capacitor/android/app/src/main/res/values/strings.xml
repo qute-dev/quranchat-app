@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">QuranChat Web App</string>
+    <string name="title_activity_main">QuranChat Web App</string>
+    <string name="package_name">org.qute.quranchat.mobile</string>
+    <string name="custom_url_scheme">org.qute.quranchat.mobile</string>
+</resources>
