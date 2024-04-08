@@ -1,7 +1,7 @@
 <template>
-  <div class="bg-grey-2 q-mt-sm" style="border-radius: 16px">
+  <div class="bg-grey-2 q-mt-sm" style="border-radius: 16px;">
     <!-- MESSAGES  -->
-    <q-scroll-area ref="msgScroll" style="height: 73vh;">
+    <q-scroll-area ref="msgScroll" :style="`height: ${chatStore.chatHeight}px;`">
       <q-list class="q-px-md">
         <div v-if="!chatStore.filteredMsgs.length" class="text-center">
           <div v-if="chatStore.method === 'nlp'" class="column items-center full-width">
@@ -34,7 +34,6 @@
       </template>
     </q-input>
   </div>
-
 </template>
 
 <script setup lang="ts">

@@ -6,6 +6,7 @@ import { Message } from 'src/models';
 import { getReply } from 'src/services/nlp';
 
 function chatStore() {
+  const chatHeight = ref(500);
   const method = ref<'nlp' | 'llm'>('nlp');
 
   const user = ref('');
@@ -44,7 +45,15 @@ function chatStore() {
     messages.value = [];
   }
 
-  return { method, messages, filteredMsgs, init, sendMessage, clear };
+  return {
+    chatHeight,
+    method,
+    messages,
+    filteredMsgs,
+    init,
+    sendMessage,
+    clear,
+  };
 }
 
 export const useChatStore = defineStore('chat', chatStore, {
