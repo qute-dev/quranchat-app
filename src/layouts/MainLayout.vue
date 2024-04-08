@@ -1,5 +1,5 @@
 <template>
-  <q-layout view="hHr lpR lfr" style="max-width: 560px; height: 100vh; margin: auto; background-color: #f4f9ff;">
+  <q-layout view="hHr lpR lfr" style="max-width: 560px; height: 95vh; margin: auto; background-color: #f4f9ff;">
     <q-resize-observer @resize="onResize" />
     <q-page-container>
       <router-view />
