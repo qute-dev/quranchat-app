@@ -20,7 +20,7 @@ function chatStore() {
 
   async function sendMessage(text: string) {
     const msg: Message = {
-      id: `${messages.value.length}`,
+      id: uuid(),
       time: Date.now(),
       text,
       from: 'me',
@@ -29,7 +29,21 @@ function chatStore() {
 
     messages.value.push(msg);
 
-    const answer = await getReply(text, user.value);
+    let answer: Message;
+
+    try {
+      answer = await getReply(text, user.value);
+    } catch (err) {
+      console.error(err);
+
+      answer = {
+        id: uuid(),
+        text: `Error send message: ${err}`,
+        from: 'bot',
+        method: msg.method,
+        time: Date.now(),
+      };
+    }
 
     answer.method = msg.method;
     answer.from = 'bot';
