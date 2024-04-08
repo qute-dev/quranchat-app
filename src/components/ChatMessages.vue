@@ -15,7 +15,7 @@
         </div>
         <template v-for="(msg) in chatStore.filteredMsgs" :key="msg.id">
           <q-chat-message :text="generateTexts(msg)" :text-html="msg.from === 'bot'" :sent="msg.from === 'me'"
-            :bg-color="msg.from === 'me' ? 'teal-2' : 'grey-3'" :text-color="msg.from === 'me' ? 'black' : 'black'"
+            :bg-color="msg.from === 'me' ? 'teal-2' : 'grey-2'" :text-color="msg.from === 'me' ? 'black' : 'black'"
             class="cursor-pointer" @click="msg.from === 'bot'" />
           <div v-if="msg.from === 'bot' && msg.data?.next" class="full-width text-center">
             <q-btn dense rounded outline color="primary" label="Lanjut" class="q-px-sm" @click="sendText('lanjut')" />
@@ -77,7 +77,7 @@ function generateTexts(msg: Message) {
   const chapter = msg.data?.chapter;
 
   if (chapter) {
-    let title = `QS ${chapter.name}`;
+    let title = `QS. ${chapter.name}`;
 
     if (msg.data?.verses?.length === 1) title += `:${msg.data?.verses[0].verse}`
 
@@ -90,11 +90,11 @@ function generateTexts(msg: Message) {
       const trans = msg.data.translations[i];
 
       if (!chapter) {
-        texts.push(`QS ${verse.chapter}:${verse.verse}`);
+        texts.push(`QS. ${verse.chapter}:${verse.verse}`);
       }
 
       texts.push(`<div class="text-right text-h5">${verse.text}<span class="text-caption"> (${verse.verse})</span></div>`);
-      texts.push(`<div class="text-italic"">${trans.text}</div>`);
+      texts.push(`<div class="text-italic"">${trans.verse}. ${trans.text}</div>`);
     }
   }
 
@@ -109,11 +109,12 @@ async function sendMessage() {
   await sleep(100);
 
   const offset = msgScroll?.value?.getScrollPosition();
+  const top = offset?.top === 0 ? 0 : (offset?.top || 0) + 400;
 
   await chatStore.sendMessage(msgText.value);
   msgText.value = '';
 
-  msgScroll?.value?.setScrollPosition('vertical', (offset?.top || 0) + 400, 250);
+  msgScroll?.value?.setScrollPosition('vertical', top, 300);
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars

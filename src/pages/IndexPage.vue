@@ -7,7 +7,7 @@
     <!-- MENU DRAWER -->
     <menu-drawer v-model="showMenu" />
 
-    <div class="q-mx-md q-pt-md">
+    <div class="q-mx-md q-pt-xs">
       <mode-tabs />
       <chat-messages />
     </div>

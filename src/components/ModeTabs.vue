@@ -10,8 +10,8 @@
 </template>
 
 <script setup lang="ts">
-import { ionTrashOutline } from '@quasar/extras/ionicons-v7';
 import { useQuasar } from 'quasar';
+import { ionTrashOutline } from '@quasar/extras/ionicons-v7';
 
 import { useChatStore } from 'src/stores/chat-store';
 
