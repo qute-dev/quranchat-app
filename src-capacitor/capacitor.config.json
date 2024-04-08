@@ -1,6 +1,6 @@
 {
   "appId": "org.qute.quranchat.mobile",
-  "appName": "QuranChat Web App",
+  "appName": "QuranChat.me",
   "webDir": "www",
   "server": {
     "androidScheme": "https"
