@@ -77,9 +77,16 @@ function generateTexts(msg: Message) {
   const chapter = msg.data?.chapter;
 
   if (chapter) {
-    let title = `QS. ${chapter.name}`;
+    let title = `<div class=text-subtitle1>\uFD3E QS. ${chapter.name} (${chapter.id})`;
 
-    if (msg.data?.verses?.length === 1) title += `:${msg.data?.verses[0].verse}`
+    if (msg.data?.verses) {
+      const { verses } = msg.data;
+
+      if (verses.length > 0) title += ` : ${verses[0].verse}`;
+      if (verses.length > 1) title += ` - ${verses[verses.length - 1].verse}`;
+    }
+
+    title += ' \uFD3F</div>';
 
     texts.push(title);
   }
@@ -93,13 +100,20 @@ function generateTexts(msg: Message) {
         texts.push(`QS. ${verse.chapter}:${verse.verse}`);
       }
 
-      texts.push(`<div class="text-right text-h5">${verse.text}<span class="text-caption"> (${verse.verse})</span></div>`);
+      texts.push(`<div class="text-right text-h5">${verse.text} <span class="text-subtitle1">(${arabicNumber(verse.verse)})</span></div>`);
       texts.push(`<div class="text-italic"">${trans.verse}. ${trans.text}</div>`);
     }
   }
 
   return texts;
 }
+
+function arabicNumber(num: number) {
+  const numberArr = num.toString().split('');
+  const arabicArr = numberArr.map((s) => String.fromCharCode(0x0660 + parseInt(s)));
+
+  return arabicArr.join('');
+};
 
 async function sendMessage() {
   if (!msgText.value || chatStore.method === 'llm') return;
