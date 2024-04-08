@@ -1,6 +1,6 @@
 {
   "name": "quranchat-app",
-  "version": "0.5.4",
+  "version": "0.5.5",
   "description": "Web app untuk quranchat.me",
   "author": "M Dedi Rudianto <mdedirudianto@gmail.com>",
   "private": true,

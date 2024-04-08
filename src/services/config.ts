@@ -1,9 +1,10 @@
-const isLocal =
-  window &&
-  window.location &&
-  (location?.href.includes('localhost') ||
-    location?.href.includes('127.0.0.1'));
+import { Platform } from 'quasar';
 
-export const API_URL = isLocal
-  ? 'http://127.0.0.1:7777'
-  : 'https://nlp.quranchat.me';
+const isLocal =
+  window?.location?.href?.includes('localhost') ||
+  window?.location?.href?.includes('127.0.0.1');
+
+export const API_URL =
+  isLocal && Platform.is.desktop
+    ? 'http://127.0.0.1:7777'
+    : 'https://nlp.quranchat.me';
