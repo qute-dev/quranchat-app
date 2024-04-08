@@ -1,18 +1,16 @@
 import axios from 'axios';
-import { useQuasar } from 'quasar';
+import { Platform } from 'quasar';
 
 import { API_URL } from './config';
 import { Message } from 'src/models';
-
-const $q = useQuasar();
 
 export async function getReply(text: string, user: string) {
   const url = `${API_URL}/query`;
 
   // console.log('[SERVICE:NLP] getReply', { url, text });
-  const platform = $q.platform.is.android
+  const platform = Platform.is.android
     ? 'android'
-    : $q.platform.is.ios
+    : Platform.is.ios
     ? 'ios'
     : 'web';
 
