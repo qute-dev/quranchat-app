@@ -34,6 +34,9 @@ function chatStore() {
     answer.method = msg.method;
     answer.from = 'bot';
 
+    // update waktu biar ga overlap
+    msg.time = (answer.time || Date.now()) - 1000;
+
     messages.value.push(answer);
   }
 
