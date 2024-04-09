@@ -1,5 +1,4 @@
 import { Chapter, Verse } from './qute';
-import { PlatformType, SourceType, ActionType } from './types';
 
 export interface Message {
   method: 'nlp' | 'llm';
@@ -17,3 +16,16 @@ export interface Message {
     next?: boolean;
   };
 }
+
+export type PlatformType =
+  | 'web'
+  | 'android'
+  | 'ios'
+  | 'wa'
+  | 'tele'
+  | 'ig'
+  | 'fb';
+
+export type ActionType = 'search' | 'index' | 'next' | 'greeting';
+
+export type SourceType = 'quran' | 'tafsir' | 'cache' | 'other';
