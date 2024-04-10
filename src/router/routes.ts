@@ -7,12 +7,15 @@ const routes: RouteRecordRaw[] = [
     children: [{ path: '', component: () => import('pages/IndexPage.vue') }],
   },
   {
+    path: '/apk',
+    component: () => import('pages/InstallPage.vue'),
+    props: { store: 'google' },
+  },
+  {
     path: '/privacy',
     component: () => import('pages/PrivacyPage.vue'),
     meta: { title: 'Privacy Policy' },
   },
-  // Always leave this as last one,
-  // but you can also remove it
   {
     path: '/:catchAll(.*)*',
     component: () => import('pages/ErrorNotFound.vue'),
