@@ -10,6 +10,9 @@
               <q-btn v-for="text in samples" :key="text" rounded outline dense size="sm" color="primary" :label="text"
                 @click="sendText(text)" class="q-px-sm q-my-xs" />
             </div>
+            <div v-if="!$q.platform.is.nativeMobileWrapper" class="q-mt-md">
+              <q-btn rounded color="secondary" glossy label="INSTALL APP" :icon="ionLogoGooglePlaystore" to="/apk" />
+            </div>
           </div>
           <q-badge v-else-if="chatStore.method === 'llm'">Lebih interaktif dg generatif AI (segera hadir).</q-badge>
         </div>
@@ -40,7 +43,10 @@
 import { onMounted, ref, watch } from 'vue';
 import { QInput, QScrollArea, copyToClipboard, useQuasar } from 'quasar';
 
-import { ionPaperPlaneOutline } from '@quasar/extras/ionicons-v7';
+import {
+  ionPaperPlaneOutline,
+  ionLogoGooglePlaystore
+} from '@quasar/extras/ionicons-v7';
 
 import { useChatStore } from 'src/stores/chat-store';
 import { sleep } from 'src/utils';
