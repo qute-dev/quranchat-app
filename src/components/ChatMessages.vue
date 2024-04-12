@@ -11,8 +11,14 @@
               <q-btn v-for="text in samples" :key="text" rounded outline dense size="sm" color="primary" :label="text"
                 @click="sendText(text)" class="q-px-sm q-my-xs" />
             </div>
-            <div v-if="!$q.platform.is.nativeMobileWrapper" class="q-mt-md">
-              <q-btn rounded color="secondary" glossy label="INSTALL APP" :icon="ionLogoGooglePlaystore" to="/apk" />
+            <div class="row q-mt-md q-gutter-x-md">
+              <div v-if="!$q.platform.is.nativeMobileWrapper" class="q-mt-md">
+                <q-btn rounded color="secondary" glossy label="INSTALL APP" :icon="ionLogoGooglePlaystore" to="/apk" />
+              </div>
+              <div class="q-mt-md">
+                <q-btn rounded color="info" glossy label="CARA PAKAI" :icon="ionHelpBuoyOutline"
+                  href="https://www.instagram.com/p/C5pbe2fyXN-/" target="_blank" />
+              </div>
             </div>
           </div>
           <q-badge v-else-if="chatStore.method === 'llm'">Lebih interaktif dg generatif AI (segera hadir).</q-badge>
@@ -47,7 +53,8 @@ import { QInput, QScrollArea, copyToClipboard, useQuasar } from 'quasar';
 
 import {
   ionPaperPlaneOutline,
-  ionLogoGooglePlaystore
+  ionLogoGooglePlaystore,
+  ionHelpBuoyOutline
 } from '@quasar/extras/ionicons-v7';
 
 import { useChatStore } from 'src/stores/chat-store';
