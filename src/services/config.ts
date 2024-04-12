@@ -1,7 +1,5 @@
-const isLocal =
-  window?.location?.href?.includes('localhost') ||
-  window?.location?.href?.includes('127.0.0.1');
+const isDev = false;
 
-export const API_URL = isLocal
+export const API_URL = isDev
   ? 'http://127.0.0.1:7777'
   : 'https://nlp.quranchat.me';
