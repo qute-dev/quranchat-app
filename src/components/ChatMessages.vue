@@ -3,6 +3,7 @@
     <!-- MESSAGES  -->
     <q-scroll-area ref="msgScroll" :style="`height: ${chatStore.chatHeight}px;`">
       <q-list class="q-px-md">
+        <!-- NO MESSAGE -->
         <div v-if="!chatStore.filteredMsgs.length" class="text-center">
           <div v-if="chatStore.method === 'nlp'" class="column items-center full-width">
             <q-badge>Cepat & tepat dg kata kunci/perintah.</q-badge>
@@ -16,7 +17,8 @@
           </div>
           <q-badge v-else-if="chatStore.method === 'llm'">Lebih interaktif dg generatif AI (segera hadir).</q-badge>
         </div>
-        <template v-for="(msg) in chatStore.filteredMsgs" :key="msg.id">
+        <!-- LIST MESSAGE -->
+        <template v-for="(msg, index) in chatStore.filteredMsgs" :key="index">
           <q-chat-message :text="generateTexts(msg)" :text-html="msg.from === 'bot'" :sent="msg.from === 'me'"
             :bg-color="msg.from === 'me' ? 'teal-2' : 'grey-2'" :text-color="msg.from === 'me' ? 'black' : 'black'"
             class="cursor-pointer" @click="msg.from === 'bot'" />
@@ -101,6 +103,9 @@ function generateTexts(msg: Message) {
     for (let i = 0; i < msg.data.verses.length; i++) {
       const verse = msg.data.verses[i];
       const trans = msg.data.translations[i];
+
+      // jaga2 kalau kosongan
+      if (!verse || !trans) continue;
 
       if (!chapter) {
         texts.push(`QS. ${verse.chapter}:${verse.verse}`);
