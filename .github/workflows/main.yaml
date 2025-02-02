@@ -1,4 +1,4 @@
-name: Deploy Web App
+name: Deploy App [Prod]
 
 on:
   push:
@@ -32,8 +32,8 @@ jobs:
     needs: deploy
 
     steps:
-      - name: Stop QuranChat web app service
+      - name: Stop QuranChat app service
         run: sudo -S systemctl stop quranchat-app
 
-      - name: Start QuranChat web app service
+      - name: Start QuranChat app service
         run: sudo -S systemctl restart quranchat-app
