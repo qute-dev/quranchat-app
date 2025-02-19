@@ -25,8 +25,8 @@
         </div>
         <!-- LIST MESSAGE -->
         <template v-for="(msg, index) in chatStore.filteredMsgs" :key="index">
-          <q-chat-message :text="generateTexts(msg)" :text-html="msg.from === 'bot'" :sent="msg.from === 'me'"
-            :bg-color="msg.from === 'me' ? 'teal-2' : 'grey-2'" :text-color="msg.from === 'me' ? 'black' : 'black'"
+          <q-chat-message :text="generateTexts(msg)" :text-html="msg.from === 'bot'" :sent="msg.from === 'user'"
+            :bg-color="msg.from === 'user' ? 'teal-2' : 'grey-2'" :text-color="msg.from === 'user' ? 'black' : 'black'"
             class="cursor-pointer" @click="msg.from === 'bot'" />
           <div v-if="msg.from === 'bot' && msg.data?.next" class="full-width text-center">
             <q-btn dense rounded outline color="primary" label="Lanjut" class="q-px-sm" @click="sendText('lanjut')" />
