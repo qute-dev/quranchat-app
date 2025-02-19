@@ -9,7 +9,7 @@ function chatStore() {
   const chatHeight = ref(500);
   const method = ref<'nlp' | 'llm'>('nlp');
 
-  const user = ref('');
+  const userId = ref('');
   const messages = ref([] as Message[]);
 
   const filteredMsgs = computed(() =>
@@ -19,11 +19,13 @@ function chatStore() {
   );
 
   async function sendMessage(text: string) {
+    init();
+
     const msg: Message = {
       id: uuid(),
       time: Date.now(),
       text,
-      from: 'me',
+      from: 'user',
       method: method.value,
     };
 
@@ -32,7 +34,7 @@ function chatStore() {
     let answer: Message;
 
     try {
-      answer = await getReply(text, user.value);
+      answer = await getReply(text, userId.value);
     } catch (err) {
       console.error(err);
 
@@ -55,7 +57,7 @@ function chatStore() {
   }
 
   function init() {
-    if (!user.value) user.value = uuid();
+    if (!userId.value) userId.value = uuid();
   }
 
   function clear() {
@@ -64,6 +66,7 @@ function chatStore() {
 
   return {
     chatHeight,
+    userId,
     method,
     messages,
     filteredMsgs,
@@ -74,6 +77,6 @@ function chatStore() {
 }
 
 export const useChatStore = defineStore('chat', chatStore, {
-  // persist: true,
-  persist: { storage: sessionStorage },
+  persist: true,
+  // persist: { storage: localStorage },
 });
