@@ -8,14 +8,14 @@ export async function getReply(text: string, user: string) {
   const url = `${API_URL}/query`;
 
   // console.log('[SERVICE:NLP] getReply', { url, text });
-  const platform = Platform.is.android
+  const channel = Platform.is.android
     ? 'android'
     : Platform.is.ios
     ? 'ios'
     : 'web';
 
   const msg = {
-    platform,
+    channel,
     user,
     text,
   };

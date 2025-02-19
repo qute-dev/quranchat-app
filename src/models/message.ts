@@ -4,8 +4,8 @@ export interface Message {
   method: 'nlp' | 'llm';
   id?: string;
   time?: number;
-  platform?: PlatformType;
-  from?: 'me' | 'bot' | string;
+  channel?: ChannelType;
+  from?: 'user' | 'bot' | string;
   source?: SourceType;
   action?: ActionType;
   text?: string;
@@ -17,7 +17,7 @@ export interface Message {
   };
 }
 
-export type PlatformType =
+export type ChannelType =
   | 'web'
   | 'android'
   | 'ios'
