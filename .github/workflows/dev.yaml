@@ -1,21 +1,21 @@
-name: Deploy App [Prod]
+name: Deploy App [Dev]
 
 on:
   push:
-    branches: [main]
+    branches: [dev]
 
   workflow_dispatch:
 
 jobs:
   deploy:
     name: Deploy
-    runs-on: [prod, self-hosted]
+    runs-on: [dev, self-hosted]
 
     steps:
       - name: Checkout dev branch
         uses: actions/checkout@v4
         with:
-          ref: main
+          ref: dev
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -30,7 +30,7 @@ jobs:
 
   run:
     name: Restart service
-    runs-on: [prod, self-hosted]
+    runs-on: [dev, self-hosted]
     needs: deploy
 
     steps:
